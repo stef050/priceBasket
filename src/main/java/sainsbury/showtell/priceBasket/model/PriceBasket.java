@@ -6,11 +6,11 @@ import java.util.List;
 public class PriceBasket {
 
 	private List<Item> basket;
-	
-	public PriceBasket(){
+
+	public PriceBasket() {
 		this.basket = new ArrayList<Item>();
 	}
-	
+
 	public List<Item> getBasket() {
 		return basket;
 	}

@@ -15,14 +15,14 @@ public class Controller {
 
 	@Autowired
 	private BasketCalculator basketCalculator;
-	
+
 	@RequestMapping(value = "/checkout", method = RequestMethod.POST)
-    public Total checkout(@RequestBody PriceBasket priceBasket) {
-        
+	public Total checkout(@RequestBody PriceBasket priceBasket) {
+
 		float subtotal = basketCalculator.calculateSubtotal(priceBasket);
-        float discount = basketCalculator.calculateDiscount(priceBasket);
-        float total = basketCalculator.calculateTotal(subtotal, discount);
-		
+		float discount = basketCalculator.calculateDiscount(priceBasket);
+		float total = basketCalculator.calculateTotal(subtotal, discount);
+
 		return new Total(subtotal, discount, total);
-    }
+	}
 }

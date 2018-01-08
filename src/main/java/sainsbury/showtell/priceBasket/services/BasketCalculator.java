@@ -16,52 +16,54 @@ public class BasketCalculator {
 
 	@Autowired
 	private KieContainer kieContainer;
-	
-	public float calculateSubtotal(PriceBasket basket){
+
+	public float calculateSubtotal(PriceBasket basket) {
 		float total = 0;
-		for (Item item : basket.getBasket()){
-        	total += item.getPrice();
-        }
+		for (Item item : basket.getBasket()) {
+			total += item.getPrice();
+		}
 		return this.roundDouble(total);
 	}
-	
-	public float calculateDiscount(PriceBasket basket){
-		 KieSession kieSession = kieContainer.newKieSession("PriceBasketSession");
-	        kieSession.insert(basket);
-	        kieSession.fireAllRules();
-	        
-	        float discount = this.sumDiscounts(kieSession);
-	        
-	        kieSession.dispose();
-	        
-	        return discount;
+
+	public float calculateDiscount(PriceBasket basket) {
+		KieSession kieSession = kieContainer.newKieSession("PriceBasketSession");
+		kieSession.insert(basket);
+		kieSession.fireAllRules();
+
+		float discount = this.sumDiscounts(kieSession);
+
+		kieSession.dispose();
+
+		return discount;
 	}
-	
-	public float sumDiscounts(KieSession kieSession){
-		
+
+	public float sumDiscounts(KieSession kieSession) {
+
 		ObjectFilter discountFilter = new ObjectFilter() {
-            @Override
-            public boolean accept(Object object) {
-                if (Discount.class.equals(object.getClass())) return true;
-                if (Discount.class.equals(object.getClass().getSuperclass())) return true;
-                return false;
-            }
-        };
-        
+			@Override
+			public boolean accept(Object object) {
+				if (Discount.class.equals(object.getClass()))
+					return true;
+				if (Discount.class.equals(object.getClass().getSuperclass()))
+					return true;
+				return false;
+			}
+		};
+
 		float totalDiscount = 0;
-		for (FactHandle handle : kieSession.getFactHandles(discountFilter)){
+		for (FactHandle handle : kieSession.getFactHandles(discountFilter)) {
 			Discount discount = (Discount) kieSession.getObject(handle);
-			
+
 			totalDiscount += discount.getAmount();
 		}
 		return this.roundDouble(totalDiscount);
 	}
-	
-	public float calculateTotal(float subtotal, float discount){
+
+	public float calculateTotal(float subtotal, float discount) {
 		return this.roundDouble(subtotal - discount);
 	}
-	
-	public float roundDouble(float num){
+
+	public float roundDouble(float num) {
 		float numMidRound = Math.round(num * 100);
 		return numMidRound / 100;
 	}

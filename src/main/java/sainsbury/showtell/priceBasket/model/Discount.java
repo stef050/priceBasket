@@ -3,7 +3,7 @@ package sainsbury.showtell.priceBasket.model;
 public class Discount {
 
 	private float amount;
-	
+
 	public Discount(float amount) {
 		this.amount = amount;
 	}
