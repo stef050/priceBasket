@@ -1,0 +1,31 @@
+package sainsbury.showtell.priceBasket.rules
+
+import sainsbury.showtell.priceBasket.model.*;
+import java.util.ArrayList;
+import java.util.List;
+
+rule SoupAndBreadDiscount when
+	PriceBasket( $basket: basket )
+  	Item( this == Item.SOUP ) from $basket
+  	Item( this == Item.BREAD) from $basket
+ then
+ 	insertLogical( new Discount((float) 0.65) );
+ end
+ 
+rule BOGOFApplesEven when
+	PriceBasket( $basket: basket )
+	List( $size : size)
+  	from collect( Item( this == Item.APPLES ) from $basket )
+  	eval(($size % 2) == 0 && $size > 0)
+ then
+ 	insertLogical( new Discount(((float) $size / 2)) );
+ end
+ 
+ rule BOGOFApplesOdd when
+	PriceBasket( $basket: basket )
+	List( $size : size)
+  	from collect( Item( this == Item.APPLES ) from $basket )
+  	eval(($size % 2) != 0 && $size > 0)
+then
+ 	insertLogical( new Discount(((float) ($size - 1) / 2)) );
+end
