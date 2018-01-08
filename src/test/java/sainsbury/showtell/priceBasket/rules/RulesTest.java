@@ -129,12 +129,10 @@ public class RulesTest {
         };
         
         Collection<FactHandle> discountsCollection = kieSession.getFactHandles(discountFilter);
-        System.out.println(discountsCollection.size());
         assertTrue(discountsCollection.size() == 1);
 
         for(FactHandle fh : discountsCollection){
         	Discount discount = (Discount) kieSession.getObject(fh);
-            System.out.println(discount.getAmount());
         	assertTrue(discount.getAmount() == (float) 0.65);
         }
 	}
